@@ -17,7 +17,7 @@ class DrinkList(models.Model):
     def __str__(self):
         return self.name + " " + self.price
 
-class Sidelist(models.Model):
+class SideList(models.Model):
     uid = models.CharField(max_length=8)
     name = models.CharField(max_length=255)
     price = models.IntegerField()
