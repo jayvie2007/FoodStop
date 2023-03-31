@@ -26,9 +26,11 @@ urlpatterns = [
     path('api/drink/', views.GetDrink.as_view(), name = "GetDrink"),
     path('api/drink/adddrink/', views.AddDrink.as_view(), name = "AddDrink"),
     path('api/drink/listdrink/', views.ListDrink.as_view(), name = "ListDrink"),
+    path('api/drink/listdrink/<str:uid>', views.ListDrink.as_view(), name = "UpdateDrink"),
     path('api/side/', views.GetSide.as_view(), name = "GetSide"),
     path('api/side/addside/', views.AddSide.as_view(), name = "AddSide"),
     path('api/side/listside/', views.ListSide.as_view(), name = "ListSide"),
+    path('api/side/listside/<str:uid>', views.ListSide.as_view(), name = "UpdateSide"),
 
     
 ]
