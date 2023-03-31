@@ -15,7 +15,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from web_api import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/food/', views.GetFood.as_view(), name = "GetFood"),
+    path('api/food/addfood/', views.AddFood.as_view(), name = "AddFood"),
+    path('api/food/listfood/', views.ListFood.as_view(), name = "ListFood"),
+    path('api/food/updatefood/', views.UpdateFood.as_view(), name = "UpdateFood"),
+    path('api/drink/', views.GetDrink.as_view(), name = "GetDrink"),
+    path('api/drink/adddrink/', views.AddDrink.as_view(), name = "AddDrink"),
+    path('api/drink/listdrink/', views.ListDrink.as_view(), name = "ListDrink"),
+    path('api/side/', views.GetSide.as_view(), name = "GetSide"),
+    path('api/side/addside/', views.AddSide.as_view(), name = "AddSide"),
+    path('api/side/listside/', views.ListSide.as_view(), name = "ListSide"),
+
+    
 ]

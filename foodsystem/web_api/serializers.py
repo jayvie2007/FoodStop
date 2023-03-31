@@ -4,34 +4,34 @@ from rest_framework import serializers
 ##################FOODS############################
 class FoodSerializer(serializers.ModelSerializer):
     class Meta:
-        models = FoodList
+        model = FoodList
         fields = '__all__'
 
 class FoodData(serializers.ModelSerializer):
     class Meta:
-        models = FoodList
+        model = FoodList
         fields = ['name']
 
 
 ##################DRINKS############################
 class DrinkSerializer(serializers.ModelSerializer):
     class Meta:
-        models = DrinkList
+        model = DrinkList
         fields = '__all__'
 
 class DrinkData(serializers.ModelSerializer):
     class Meta:
-        models = DrinkList
+        model = DrinkList
         fields = ['name']
 
 ##################SIDES############################
 class SideSerializer(serializers.ModelSerializer):
     class Meta:
-        models = SideList
+        model = SideList
         fields = '__all__'
 
 class SideData(serializers.ModelSerializer):
     class Meta:
-        models = SideList
+        model = SideList
         fields = ['name']
         
