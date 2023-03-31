@@ -29,6 +29,11 @@ class DrinkData(serializers.ModelSerializer):
         model = DrinkList
         fields = ['name']
 
+class DrinkUpdate(serializers.ModelSerializer):
+    class Meta:
+        model = DrinkList
+        fields = ['name', 'price']
+
 ##################SIDES############################
 class SideSerializer(serializers.ModelSerializer):
     class Meta:
@@ -40,3 +45,7 @@ class SideData(serializers.ModelSerializer):
         model = SideList
         fields = ['name']
         
+class DrinkUpdate(serializers.ModelSerializer):
+    class Meta:
+        model = SideList
+        fields = ['name', 'price']

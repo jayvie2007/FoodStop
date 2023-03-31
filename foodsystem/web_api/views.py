@@ -34,7 +34,7 @@ class AddFood(APIView):
                 )
                 return Response(data = {"status": error, "message":message})
             except:
-                    #serialiazers.save()
+                    serialiazers.save()
                     message = (f"{food} has been added")
                     return Response(data={"status": ok, 'message': message})
         return Response(serialiazers.errors, status=error)
@@ -51,22 +51,19 @@ class ListFood(APIView):
                 )
                 return Response(data = {"status": ok, 'message': message, 'foods' : serialiazers.data})
             except:
-                message = ("data not found")
-                return Response(data = {"status": not_found, 'message': message})
+                return Response(data = {"status": not_found, 'message': no_info})
         return Response(serialiazers.errors, status=error)
     
     def put(self, request, uid):
         try:
             foodlist = FoodList.objects.get(uid = uid)
+            foodInput = request.data['name']
+            priceInput = int(request.data['price'])
         except FoodList.DoesNotExist:
             return Response(status=not_found)
-        
-        foodInput = request.data['name']
-        priceInput = int(request.data['price'])
 
         serializers = FoodUpdate(foodlist, data=request.data)
        
-    
         if (priceInput != foodlist.price) and (foodInput != foodlist.name):
             message = (f"{foodlist.name} has been updated to {foodInput} and its price from {foodlist.price} into {priceInput}")
         elif priceInput != foodlist.price:
@@ -90,29 +87,65 @@ class ListFood(APIView):
 
 class GetDrink(APIView):
     def get(self, request):
-        foods =  FoodList.objects.all()
-        serializers = FoodSerializer(foods, many=True)
+        foods =  DrinkList.objects.all()
+        serializers = DrinkSerializer(foods, many=True)
         return Response({"Drinks Registered": serializers.data})
         
 class AddDrink(APIView):
     def post(self, request):
+        drink = request.data['name']
         serializers = DrinkSerializer(data = request.data)
         uid = generate_uuid()
         request.data._mutable = True
         request.data['uid'] = uid
         request.data._mutable = True
-        
         if serializers.is_valid():
-            message = ("Drinks has been added")
-            serializers.save()
-            return Response(data = {"status":created, 'message': message})
+            message = (f"{drink} is currently in the drink lists")
+            try:
+                drinkname = DrinkList.objects.get(
+                    name = drink
+                )
+                return Response(data = {"status": error, "message": message})
+            except:    
+                serializers.save()
+                message = (f"{drink} has been added to the drink lists")
+                return Response(data = {"status":created, 'message': message})
         return Response(serializers.errors, status=error)
 
 class ListDrink(APIView):
-    pass
+    def post(self, request):
+        side = request.data['name']
+        serializers = SideData(data = request.data)
+        if serializers.is_valid():
+            message = ("The side dish has successfully been gotten")
+            try:
+                sidelist = SideList.objects.get(
+                    name = side
+                )
+                return Response(data = {"status": ok, "message": message ["sides" :serializers.data]})
+            except:
+                return Response(data={"message": no_info})
+            
+    def put(self, request, uid):
+        try:
+            sidelist = SideList.objects.get(uid = uid)
+            side = request.data['name']
+            price = int(request.data['price'])
+        except SideList.DoesNotExist:
+            return Response(status=not_found)
+        #serializers = side        
+
+    def delete(self, request, uid):
+        try:
+            sidelist = SideList.objects.get(uid = uid)
+        except SideList.DoesNotExist:
+            return Response(status=not_found)
+        sidelist.delete()
+        return Response(status = no_data)
 
 class AddSide(APIView):
     def post(self, request):
+        side = request.data['name']
         serializers = SideSerializer(data = request.data)
         uid = generate_uuid()
         request.data._mutable = True
@@ -120,19 +153,28 @@ class AddSide(APIView):
         request.data._mutable = False
         sides = request.data['name']
         if serializers.is_valid():
-            message = (f"{sides} has been added to the Sides list")
-            serializers.save()
-            return Response(data = {"status": created, "message":message})
+            message = (f"{sides} is currently in the side list")
+            try:
+                sidelist = SideList.objects.get(
+                    name = side
+                )
+                return Response(data = {"status": error, "message": message})
+            except:
+                message = (f"{sides} has been added to the Sides list")
+                serializers.save()
+                return Response(data = {"status": created, "message":message})
         return Response(serializers.errors, status=error)
 
 class GetSide(APIView):
     def get(self, request):
-        foods =  FoodList.objects.all()
-        serializers = FoodSerializer(foods, many=True)
+        foods =  SideList.objects.all()
+        serializers = SideSerializer(foods, many=True)
         return Response({"Sides Registered": serializers.data})
     
 class ListSide(APIView):
-    pass
+    def post(self, request):
+        sideInput = ['name']
+        serializers = SideData(data = request.data)
 
 def generate_uuid():
     uid = uuid.uuid4().hex[-8:]
