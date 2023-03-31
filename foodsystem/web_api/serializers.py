@@ -12,6 +12,11 @@ class FoodData(serializers.ModelSerializer):
         model = FoodList
         fields = ['name']
 
+class FoodUpdate(serializers.ModelSerializer):
+    class Meta:
+        model = FoodList
+        fields = ['name', 'price']
+
 
 ##################DRINKS############################
 class DrinkSerializer(serializers.ModelSerializer):

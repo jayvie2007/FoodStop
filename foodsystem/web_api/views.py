@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .serializers import FoodSerializer, FoodData, DrinkSerializer, DrinkData, SideSerializer, SideData
+from .serializers import FoodSerializer, FoodData, FoodUpdate, DrinkSerializer, DrinkData, SideSerializer, SideData
 from .models import FoodList, DrinkList, SideList
 
 from rest_framework.views import APIView
@@ -55,24 +55,31 @@ class ListFood(APIView):
                 return Response(data = {"status": not_found, 'message': message})
         return Response(serialiazers.errors, status=error)
     
-class UpdateFood(APIView):
-    def put(self, request):
+    def put(self, request, uid):
+        try:
+            foodlist = FoodList.objects.get(uid = uid)
+        except FoodList.DoesNotExist:
+            return Response(status=not_found)
+        
         foodInput = request.data['name']
-        priceInput = request.data['price']
-        serializers = FoodSerializer(data = request.data)
+        priceInput = int(request.data['price'])
+
+        serializers = FoodUpdate(foodlist, data=request.data)
+       
+    
+        if (priceInput != foodlist.price) and (foodInput != foodlist.name):
+            message = (f"{foodlist.name} has been updated to {foodInput} and its price from {foodlist.price} into {priceInput}")
+        elif priceInput != foodlist.price:
+            message = (f"The price has been updated to {priceInput} from {foodlist.price}")
+        elif foodInput != foodlist.name:
+            message = (f"The food name has been changed to {foodInput} from {foodlist.name}")
+        else:
+            message = ("Nothing has been changed")
         if serializers.is_valid():
-            try:
-                foods = FoodList.objects.get(
-                    name = foodInput,
-                    price = priceInput,
-                )
-                serializers.save()
-                message = (f"{foods.name} has been updated to {foodInput} and it's price from {foods.price} into {priceInput}")
-                return Response(date=  {"message": message})
-            except:
-                message = ("Data not found")
-                return Response(data = {"status":not_found, "message":message})
+            serializers.save()
+            return Response(data = {"message": message , 'status': ok})
         return Response(serializers.errors, status=error)
+
 class GetDrink(APIView):
     def get(self, request):
         foods =  FoodList.objects.all()
