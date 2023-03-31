@@ -80,6 +80,14 @@ class ListFood(APIView):
             return Response(data = {"message": message , 'status': ok})
         return Response(serializers.errors, status=error)
 
+    def delete(self, request, uid):
+            try:
+                foodlist = FoodList.objects.get(uid = uid)
+            except FoodList.DoesNotExist:
+                return Response(status=not_found)
+            foodlist.delete()
+            return Response(status = no_data)
+
 class GetDrink(APIView):
     def get(self, request):
         foods =  FoodList.objects.all()
