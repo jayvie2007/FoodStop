@@ -98,7 +98,7 @@ class AddDrink(APIView):
         uid = generate_uuid()
         request.data._mutable = True
         request.data['uid'] = uid
-        request.data._mutable = True
+        request.data._mutable = False
         if serializers.is_valid():
             message = (f"{drink} is currently in the drink lists")
             try:

@@ -6,7 +6,7 @@ class FoodSerializer(serializers.ModelSerializer):
     class Meta:
         model = FoodList
         fields = '__all__'
-
+  
 class FoodData(serializers.ModelSerializer):
     class Meta:
         model = FoodList
